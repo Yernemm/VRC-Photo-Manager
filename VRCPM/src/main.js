@@ -2,7 +2,9 @@ const fs = require('fs');
 let duploader = require('./discorduploader');
 let fwatcher = require('./folderwatcher');
 
-duploader.startWebhook("");
+const config = require('./config.json');
+
+duploader.startWebhook(config.webhook);
 
 fwatcher.watch(onDetect);
 
@@ -12,7 +14,7 @@ function onDetect(path){
 
         console.log(stats);
 
-        duploader.uploadImage(path, "Yernemm", "Unknown World", Math.floor(stats.mtimeMs / 1000));
+        duploader.uploadImage(path, "Yernemm", "an unknown world", Math.floor(stats.mtimeMs / 1000));
 
     });
 }
