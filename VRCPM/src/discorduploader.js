@@ -5,10 +5,10 @@ this.startWebhook = (url) => {
     this.webhook = webhookClient;
 }
 
-this.uploadImage = (imagePath, vrcName, vrcWorld, date) => {
+this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date) => {
     this.webhook.send({
         username: vrcName + " (VRChat)",
-        content: "New photo by " + vrcName + " in " + vrcWorld + " <t:" + date + ":R>",
+        content: "New photo by " + vrcName + " in " + vrcWorld + " <t:" + date + ":R>\n<https://vrchat.com/home/world/" + vrcWorldId + ">",
         files: [{
             
             attachment: imagePath,
