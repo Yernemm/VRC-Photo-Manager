@@ -16,6 +16,7 @@
     "name": "Yernemm",
     "email": "yrnemmizer@gmail.com"
   },
+  "repository": "https://github.com/Yernemm/VRC-Photo-Manager",
   "license": "MIT",
   "config": {
     "forge": {
