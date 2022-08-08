@@ -42,12 +42,17 @@
           "config": {}
         }
       ]
+    },
+    "repository": {
+      "owner": "Yernemm",
+      "name": "VRC-Photo-Manager"
     }
   },
   "dependencies": {
     "chokidar": "^3.5.3",
     "discord.js": "^14.1.2",
     "electron-squirrel-startup": "^1.0.0",
+    "update-electron-app": "^2.0.1",
     "vrchat": "^1.7.2",
     "xterm": "^4.19.0"
   },
