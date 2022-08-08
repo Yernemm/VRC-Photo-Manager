@@ -8,6 +8,7 @@ Still a work-in-progress project. Many core features are not ready yet.
 
 ### Instructions:
 
+- [Download the latest release here](https://github.com/Yernemm/VRC-Photo-Manager/releases)
 - Open the program
 - Enter your VRChat username and password, and a webhook link to a Discord channel
 - Click the login button
