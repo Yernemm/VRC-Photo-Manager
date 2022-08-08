@@ -89,4 +89,4 @@ typings/
 out/
 
 src/config.json
-token.json
+githubtoken.json
