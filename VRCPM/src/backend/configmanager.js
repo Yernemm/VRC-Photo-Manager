@@ -1,21 +1,32 @@
 const fs = require('fs');
+const main = require("./main");
+const {ipcMain} = require('electron');
 
 //get appdata location
 const appdata = require('os').homedir() + "\\AppData\\Roaming";
 
 //create if not exists folder %appdata%\Yernemm\VRCPM
+if (!fs.existsSync(appdata + "\\Yernemm")) {
+    main.log("[CM] Creating Yernemm software folder...");
+    fs.mkdirSync(appdata + "\\Yernemm");
+}
+
+//create if not exists folder %appdata%\Yernemm\VRCPM
 if (!fs.existsSync(appdata + "\\Yernemm\\VRCPM")) {
+    main.log("[CM] Creating config folder...");
     fs.mkdirSync(appdata + "\\Yernemm\\VRCPM");
 }
 
 //create if not exists file %appdata%\Yernemm\VRCPM\config1.json
 if (!fs.existsSync(appdata + "\\Yernemm\\VRCPM\\config1.json")) {
+    main.log("[CM] Creating config file...");
     fs.writeFileSync(appdata + "\\Yernemm\\VRCPM\\config1.json", "{}");
 }
 
 let config = require(appdata + "\\Yernemm\\VRCPM\\config1.json");
 
 function writeConfig(username, password, webhook){
+    main.log("[CM] Writing config...");
     config.username = username;
     config.password = password;
     config.webhook = webhook;
@@ -27,17 +38,30 @@ function getConfig(){
 }
 
 function reloadConfig(){
+    main.log("[CM] Reloading config...");
     config = require(appdata + "\\Yernemm\\VRCPM\\config1.json");
 }
 
 function setConfig(username, password, webhook){
+    main.log("[CM] Setting config...");
     config = {username, password, webhook};
 }
 
 function saveConfig(){
+    main.log("[CM] Saving config...");
     fs.writeFileSync(appdata + "\\Yernemm\\VRCPM\\config1.json", JSON.stringify(config));
 }
 
+function isLoaded(){
+    return config.username != undefined && config.password != undefined && config.webhook != undefined;
+}
+
+ipcMain.on("open-config", (event, details) =>{
+    main.log("[CM] Opening config...");
+    //open explorer window to the config folder
+    require('child_process').exec('explorer ' + appdata + "\\Yernemm\\VRCPM");
+});
 
 
-module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig};
+
+module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded};

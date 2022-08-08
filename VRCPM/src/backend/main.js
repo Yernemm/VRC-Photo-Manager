@@ -1,8 +1,13 @@
+let duploader;
+let fwatcher;
+let vrchatapi;
+let cfg;
+
+let stuffStarted = false;
+
 const fs = require('fs');
 
 const {ipcMain} = require('electron');
-
-const config = require('../config.json');
 
 let mainWindow = undefined;
 
@@ -21,19 +26,14 @@ function onDetect(path){
 async function main(window){
 
     mainWindow = window;
+    cfg = require('./configmanager');
 
-    let duploader = require('./discorduploader');
-    let fwatcher = require('./folderwatcher');
-    let vrchatapi = require('./vrchatapi');
-    let cfg = require('./configmanager');
+    if(cfg.isLoaded()){
+        startWithConfig();
+    }else{
+        log("[MAIN] No saved config found. Please log in.");
+    }
 
-    duploader.startWebhook(config.webhook);
-    fwatcher.watch(onDetect);
-
-    setTimeout(() => {
-        
-        log("[MAIN] " + vrchatapi.getCurrentWorld());
-    }, 3000);
 
 }
 
@@ -43,6 +43,46 @@ function log(message){
     
     mainWindow.webContents.send('console-log', time + message);
 }
+
+function startWithConfig(){
+    if(stuffStarted) return;
+
+    if(!cfg.isLoaded()){
+        log("[MAIN] Config not loaded.");
+        return;
+    }
+
+    stuffStarted = true;
+
+    duploader = require('./discorduploader');
+    fwatcher = require('./folderwatcher');
+    vrchatapi = require('./vrchatapi');
+
+    duploader.startWebhook(cfg.getConfig().webhook);
+    fwatcher.watch(onDetect);
+
+    setTimeout(() => {
+        
+        log("[MAIN] " + vrchatapi.getCurrentWorld());
+    }, 3000);
+}
+
+ipcMain.on("login-button", (event, details) =>{
+    log("[MAIN] Login button pressed.");
+    cfg.setConfig(
+        details.username,
+        details.password,
+        details.webhook
+    );
+
+    startWithConfig();
+})
+
+ipcMain.on("save-button", (event, details) =>{
+    log("[MAIN] Save button pressed.");
+    cfg.saveConfig();
+});
+
 
 
 

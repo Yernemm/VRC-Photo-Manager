@@ -13,15 +13,18 @@
     <p>Welcome to VRChat Photo Manager (VRCPM).</p>
     <p>This program is still WORK IN PROGRESS so don't expect things to work perfectly :^)</p>
     <!--form with login details and a save login button-->
-    <form action="login.php" method="post">
+    <form>
       <label for="username">Username:</label>
       <input type="text" name="username" id="username" /><br/>
       <label for="password">Password:</label>
       <input type="password" name="password" id="password" /><br/>
-      <input type="submit" value="Login" />
-      <input type="submit" value="Save details" />
+      <label for="webhook">Webhook:</label>
+      <input type="password" name="webhook" id="webhook" /><br/>
+      <input type="button" onclick="loginButton()" value="Login" />
+      <input type="button" onclick="saveButton()" value="Save Details" />
+      <input type="button" onclick="openConfig()" value="Open Config Folder" />
     </form>
-    <p><b>WARNING: Currently, login information is stored as <i>plaintext</i>. Save at your own risk.</b></p>
+    <p><b>WARNING: Currently, saved login information is stored as <i>plaintext</i>. Also, 2FA is currently not supported. Use at your own risk.</b></p>
     <div id="terminal"></div>
     <p>Made by Yernemm</p>
 
