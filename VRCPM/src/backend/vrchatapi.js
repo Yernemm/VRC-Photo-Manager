@@ -36,7 +36,12 @@ AuthenticationApi.getCurrentUser().then(resp => {
 
     this.updateCurrentWorld();
 
-});
+})
+.catch(err => { 
+    main.log("[VA] \u001b[31mERROR ERROR ERROR\u001b[0m");
+    main.log(`[VA] ERROR: Failed to log in. Please restart VRCPM and try again.`);
+}
+);
 
 let currentWorld = "an unknown world";
 let currentWorldId = "0000";

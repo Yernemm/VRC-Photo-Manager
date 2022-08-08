@@ -2,7 +2,15 @@ const discordjs = require("discord.js");
 const main = require("./main");
 
 this.startWebhook = (url) => {
-    const webhookClient = new discordjs.WebhookClient({url: url});
+
+    let webhookClient;
+    try{
+        webhookClient = new discordjs.WebhookClient({url: url});
+    }catch(e){
+        main.log("[DU] \u001b[31mERROR ERROR ERROR\u001b[0m");
+        main.log("[DU] Error starting webhook. Please restart VRCPM and paste a working webhook URL.");
+    }
+    
     this.webhook = webhookClient;
     main.log("[DU] Webhook started");
 }
