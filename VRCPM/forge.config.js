@@ -31,8 +31,8 @@ module.exports = {
               repository: {
                 owner: 'Yernemm',
                 name: 'VRC-Photo-Manager',
-                authToken: token.token
               },
+              authToken: token.token,
               prerelease: true
             }
           }
