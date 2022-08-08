@@ -4,6 +4,19 @@ A program which will embed world metadata into your vrchat photos and let you ed
 
 Still a work-in-progress project. Many core features are not ready yet.
 
+------
+
+### Instructions:
+
+- Open the program
+- Enter your VRChat username and password, and a webhook link to a Discord channel
+- Click the login button
+- Look for any errors. If there are errors, restart and try again with correct information.
+- Optionally, click "Save Details", this will save the data to a config file and load it every time the program starts.
+- If you saved incorrect details, click "Open Config Folder" and delete the config file.
+
+------
+
 ### Currently working features:
 - Detects new photos
 - Automatically uploads them to Discord via webhooks
