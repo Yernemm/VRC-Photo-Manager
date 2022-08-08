@@ -1,6 +1,6 @@
 {
   "name": "vrcpm",
-  "productName": "vrcpm",
+  "productName": "VRChat Photo Manager",
   "version": "0.1.0",
   "description": "A program which will embed world metadata into your vrchat photos and let you edit them and upload to Discord.",
   "main": "src/index.js",
@@ -19,31 +19,7 @@
   "repository": "https://github.com/Yernemm/VRC-Photo-Manager",
   "license": "MIT",
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "vrcpm"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    },
+    "forge": "./forge.config.js",
     "repository": {
       "owner": "Yernemm",
       "name": "VRC-Photo-Manager"

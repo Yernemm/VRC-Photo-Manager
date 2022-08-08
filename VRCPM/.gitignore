@@ -89,3 +89,4 @@ typings/
 out/
 
 src/config.json
+token.json
