@@ -1,5 +1,6 @@
 const vrchat = require("vrchat");
-const config = require("./config.json");
+const config = require("../config.json");
+const main = require("./main");
 
 const configuration = new vrchat.Configuration({
     username: config.username,
@@ -25,7 +26,7 @@ let user = "Unknown";
 
 AuthenticationApi.getCurrentUser().then(resp => {
     const currentUser = resp.data;
-    console.log(`Logged in as: ${currentUser.displayName}`);
+    main.log(`[VRCAPI] Logged in as: ${currentUser.displayName}`);
     //console.log(currentUser);
 
     user = currentUser.displayName;
@@ -43,8 +44,8 @@ let currentWorldId = "0000";
 this.updateCurrentWorld = () => {
     UsersApi.getUser(userid).then(resp => {
         let worldId = resp.data.worldId;
-        if(!resp.data.worldId || resp.data.worldId == "traveling") {
-            console.log("Can't get current world (likely travelling)");
+        if(!resp.data.worldId || resp.data.worldId == "traveling" || resp.data.worldId == "offline") {
+            main.log("[VRCAPI] Can't get current world (" + resp.data.worldId + ")");
            
             return;
         }else{
@@ -54,8 +55,8 @@ this.updateCurrentWorld = () => {
     
                 currentWorld = worldData.name;
     
-                console.log(`Logged in as: ${authData.displayName}`);
-                console.log(`Currently in world: ${worldData.name}`);
+                main.log(`[VRCAPI] Logged in as: ${authData.displayName}`);
+                main.log(`[VRCAPI] Currently in world: ${worldData.name}`);
     
             });
         }
@@ -67,7 +68,7 @@ this.updateCurrentWorld = () => {
 
 setInterval(() => {
     this.updateCurrentWorld();
-}, 60 * 1000);
+}, 30 * 1000);
 
 function getCurrentWorld() {
     return currentWorld;

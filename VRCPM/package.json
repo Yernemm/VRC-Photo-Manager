@@ -48,7 +48,8 @@
     "chokidar": "^3.5.3",
     "discord.js": "^14.1.2",
     "electron-squirrel-startup": "^1.0.0",
-    "vrchat": "^1.7.2"
+    "vrchat": "^1.7.2",
+    "xterm": "^4.19.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.65",

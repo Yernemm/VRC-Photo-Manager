@@ -2,11 +2,28 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <title>VRChat Photo Manager</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../node_modules/xterm/css/xterm.css" />
+    <script src="../node_modules/xterm/lib/xterm.js"></script>
+    <script defer src="./render.js"></script>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <h1>Hello!</h1>
+    <p>Welcome to VRChat Photo Manager (VRCPM).</p>
+    <p>This program is still WORK IN PROGRESS so don't expect things to work perfectly :^)</p>
+    <!--form with login details and a save login button-->
+    <form action="login.php" method="post">
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" /><br/>
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" /><br/>
+      <input type="submit" value="Login" />
+      <input type="submit" value="Save details" />
+    </form>
+    <p><b>WARNING: Currently, login information is stored as <i>plaintext</i>. Save at your own risk.</b></p>
+    <div id="terminal"></div>
+    <p>Made by Yernemm</p>
+
   </body>
 </html>

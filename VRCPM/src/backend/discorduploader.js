@@ -1,14 +1,20 @@
 const discordjs = require("discord.js");
+const main = require("./main");
 
 this.startWebhook = (url) => {
     const webhookClient = new discordjs.WebhookClient({url: url});
     this.webhook = webhookClient;
+    main.log("[DU] Webhook started");
 }
 
 this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date) => {
+    let whcontent = "New photo by " + vrcName + " in " + vrcWorld + " <t:" + date + ":R>\n<https://vrchat.com/home/world/" + vrcWorldId + ">";
+
+    main.log("[DU] Uploading image to webhook\n" + whcontent);
+
     this.webhook.send({
         username: vrcName + " (VRChat)",
-        content: "New photo by " + vrcName + " in " + vrcWorld + " <t:" + date + ":R>\n<https://vrchat.com/home/world/" + vrcWorldId + ">",
+        content: whcontent,
         files: [{
             
             attachment: imagePath,
