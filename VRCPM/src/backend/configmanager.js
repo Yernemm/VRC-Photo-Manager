@@ -49,7 +49,11 @@ function setConfig(username, password, webhook){
 
 function saveConfig(){
     main.log("[CM] Saving config...");
-    fs.writeFileSync(appdata + "\\Yernemm\\VRCPM\\config1.json", JSON.stringify(config));
+    try{
+        fs.writeFileSync(appdata + "\\Yernemm\\VRCPM\\config1.json", JSON.stringify(config));
+    }catch(e){
+        main.error("C-001", "Error saving config: " + e);
+    }
 }
 
 function isLoaded(){
@@ -62,6 +66,11 @@ ipcMain.on("open-config", (event, details) =>{
     require('child_process').exec('explorer ' + appdata + "\\Yernemm\\VRCPM");
 });
 
+function save2fa(fa){
+    main.log("[CM] Saving 2FA...");
+    config = {...config, fa};
+    saveConfig();
+}
 
 
-module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded};
+module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, save2fa};

@@ -39,4 +39,9 @@ function openConfig(){
     ipcRenderer.send("open-config");
 }
 
+function verify2fa(){
+    localLog("Verify 2FA button pressed.");
+    ipcRenderer.send("verify2fa", document.getElementById("token").value);
+}
+
 ipcRenderer.send("ready");
