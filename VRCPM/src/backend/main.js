@@ -50,6 +50,7 @@ async function main(window){
     log("Changes:");
     log("-Better error and alert logging");
     log("-Slightly better UI");
+    log("-Experimental 2FA support")
     log(`
 =============================================\u001b[0m`)
 
