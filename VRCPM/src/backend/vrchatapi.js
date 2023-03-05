@@ -10,10 +10,15 @@ const configuration = new vrchat.Configuration({
     username: cfg.getConfig().username,
     password: cfg.getConfig().password,
 });
+const axiosConfiguration = axios.create({
+    headers: {
+        'User-Agent': 'vrc-photo-manager/0.2.1 yrnemmizer@gmail.com'
+    }
+});
 
-const AuthenticationApi = new vrchat.AuthenticationApi(configuration);
-const UsersApi = new vrchat.UsersApi(configuration);
-const WorldsApi = new vrchat.WorldsApi(configuration);
+const AuthenticationApi = new vrchat.AuthenticationApi(configuration, undefined, axiosConfiguration);
+const UsersApi = new vrchat.UsersApi(configuration, undefined, axiosConfiguration);
+const WorldsApi = new vrchat.WorldsApi(configuration, undefined, axiosConfiguration);
 
 if(cfg.getConfig().fa){
     setAuthCookie(cfg.getConfig().fa)

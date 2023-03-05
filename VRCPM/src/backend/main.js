@@ -46,11 +46,9 @@ async function main(window){
                                                                                              
     `)
 
-    log("VRCPM Version 0.2");
+    log("VRCPM Version 0.2.1");
     log("Changes:");
-    log("-Better error and alert logging");
-    log("-Slightly better UI");
-    log("-Experimental 2FA support")
+    log("-Fixed 403 error when logging in.");
     log(`
 =============================================\u001b[0m`)
 
