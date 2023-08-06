@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Yernemm/VRC-Photo-Manager/issues"
   },
-  "homepage": "https://github.com/Yernemm/VRC-Photo-Manager#readme"
+  "homepage": "https://github.com/Yernemm/VRC-Photo-Manager#readme",
+  "dependencies": {
+    "qr-scanner": "^1.4.2"
+  }
 }
