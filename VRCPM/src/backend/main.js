@@ -22,7 +22,7 @@ function onDetect(path){
         }
 
         console.log(stats);
-
+        
         duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
 
     });
@@ -46,9 +46,9 @@ async function main(window){
                                                                                              
     `)
 
-    log("VRCPM Version 0.2.1");
+    log("VRCPM Version 0.3.0");
     log("Changes:");
-    log("-Fixed 403 error when logging in.");
+    log("-Added automatic QR Code scanning");
     log(`
 =============================================\u001b[0m`)
 
