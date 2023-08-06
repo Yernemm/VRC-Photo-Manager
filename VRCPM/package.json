@@ -26,6 +26,7 @@
     }
   },
   "dependencies": {
+    "@andreekeberg/imagedata": "^1.0.2",
     "chokidar": "^3.5.3",
     "discord.js": "^14.1.2",
     "electron-squirrel-startup": "^1.0.0",
