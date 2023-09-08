@@ -30,30 +30,40 @@ async function onDetect(path){
         console.log(stats);
         
         //Read VRCX Desciption
-        fs.createReadStream(path)
-        .pipe(pngitxt.getitxt( 'Description', (err,data)=>{
-            if(err){
-                duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
-            }else{
-                try{
-                    let desc = JSON.parse(data.value);
-                    let moreInfo = "**[VRCX]** Users: `";
-                    desc.players.forEach(player => {moreInfo += player.displayName + ", "})
-                    moreInfo = moreInfo.slice(0, -2);
-                    moreInfo += "`";
+        //Ignore non-pngs
+        if(path.endsWith('.png')){
+            fs.createReadStream(path)
+            .pipe(pngitxt.getitxt( 'Description', (err,data)=>{
+                if(err){
+                    uploadNonVrcx(stats, path);
+                }else{
+                    try{
+                        let desc = JSON.parse(data.value);
+                        let moreInfo = "**[VRCX]** Users: `";
+                        desc.players.forEach(player => {moreInfo += player.displayName + ", "})
+                        moreInfo = moreInfo.slice(0, -2);
+                        moreInfo += "`";
 
-                    duploader.uploadImage(path, desc.author.displayName, desc.world.name, desc.world.id, Math.floor(stats.mtimeMs / 1000), moreInfo);
+                        duploader.uploadImage(path, desc.author.displayName, desc.world.name, desc.world.id, Math.floor(stats.mtimeMs / 1000), moreInfo);
 
-                }catch{
-                    duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
+                    }catch{
+                        uploadNonVrcx(stats, path);
+                    }
+                    
                 }
-                
-            }
-        } ))
+            } ))
+        }else{
+            uploadNonVrcx(stats, path);
+        }
         
         
     });
 }
+
+function uploadNonVrcx(stats, path){
+    duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
+}
+
 
 async function main(window){
 
