@@ -9,7 +9,7 @@ module.exports = {
         name: "@electron-forge/maker-squirrel",
         config: {
           name: "vrcpm",
-          setupIcon: '/path/to/icon.ico'
+          setupIcon: 'src/images/icon.ico'
         }
       },
       {
