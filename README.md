@@ -22,9 +22,10 @@ Still a work-in-progress project. Many core features are not ready yet.
 - Detects new photos
 - Automatically uploads them to Discord via webhooks
 - Discord upload contains world information and time taken
+- Uses VRCX photo metadata if present
 
 ### To-do:
-- Embed world info into photo meta-data
+- ~~Embed world info into photo meta-data~~
 - Photo browser
 - Uploader for older photos
 - Multiple webhook support
