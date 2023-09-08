@@ -1,7 +1,9 @@
 const token = require("./githubtoken.json");
 
 module.exports = {
-    packagerConfig: {},
+    packagerConfig: {
+      icon: 'src/images/icon'
+    },
     makers: [
       {
         name: "@electron-forge/maker-squirrel",

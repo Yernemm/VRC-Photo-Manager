@@ -88,6 +88,7 @@ async function main(window){
     log("-Visual Redesign");
     log("-Setting to pick a custom photos folder");
     log("-Added support for VRCX Screenshot Helper data");
+    log("-New icon");
     log(`
 =============================================\u001b[0m`)
 
