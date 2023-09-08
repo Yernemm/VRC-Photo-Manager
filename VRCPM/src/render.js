@@ -30,7 +30,8 @@ function saveButton(){
     ipcRenderer.send("save-button", {
         username: document.getElementById("username").value,
         password: document.getElementById("password").value,
-        webhook: document.getElementById("webhook").value
+        webhook: document.getElementById("webhook").value,
+        photopath: document.getElementById("photopath").value
     });
 }
 
@@ -45,3 +46,47 @@ function verify2fa(){
 }
 
 ipcRenderer.send("ready");
+
+function hideAll(){
+
+    ["terminalBlock", "settingsBlock"].forEach(block => {
+      x = document.getElementById(block);
+      x.style.display = "none";
+    });
+
+    
+    ["tabLogs", "tabSettings"].forEach(block => {
+        x = document.getElementById(block);
+        x.className = "tab";
+      });
+
+}
+  
+  
+  function clickLogs(){
+    hideAll()
+    var x = document.getElementById("terminalBlock");
+      x.style.display = "block";
+
+  }
+  
+  function clickSettings(){
+    hideAll()
+    var x = document.getElementById("settingsBlock");
+    x.style.display = "block";
+
+  }
+
+function selectTab(tabId, blockId)
+{
+    let tab = document.getElementById(tabId);
+    let block = document.getElementById(blockId);
+
+    hideAll();
+
+    tab.className = "tab tab-selected";
+
+    block.style.display = "block";
+
+
+}

@@ -2,17 +2,82 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   margin: auto;
-  max-width: 700px;
-  background: rgb(158, 73, 175);
-  background-color: rgb(158, 73, 175);
-  background: linear-gradient(0deg, rgba(102,39,115,1) 0%, rgba(97,113,196,1) 77%, rgba(151,163,241,1) 100%);
+  max-width: 720px;
+  background: #333;
+  color: rgb(203, 114, 255);
   background-size: 100% 100%;
   background-repeat:no-repeat;
   background-attachment: fixed;
+  font-size: large;
  
 }
 
 /**/
 .centered {
   text-align: center;
+}
+
+ .button {
+  background-color: #424242; /* Green */
+  border: none;
+  color: rgb(240, 235, 243);
+  padding: 6px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  border-radius: 4px;
+  
+  border: 2px, 2px;
+
+}
+
+ .button:hover {
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.24), 0 5px 10px 0 rgba(0,0,0,0.19);
+  background-color: #923bcc;
+}
+
+.tab {
+  background-color: #292929; /* Green */
+  color: rgb(226, 191, 255);
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  width: max-content;
+  border: 2px solid rgb(51, 51, 51);
+  border-bottom: 0;
+}
+
+.tab-selected{
+  background-color: #161616;
+}
+
+.tab-body {
+  background-color: #161616;
+  border: 5px solid #161616;
+  width: 720px;
+  padding: 5px;
+  
+}
+
+input[type=text], input[type=password]{
+  
+  padding: 6px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  background-color: #333;
+  color: #ddd;
+  border: none;
+  border-bottom: 2px solid rgb(204, 0, 255);
+}
+
+.settings-label {
+  width: 20%;
+}
+.settings-input {
+  width: 80%;
 }

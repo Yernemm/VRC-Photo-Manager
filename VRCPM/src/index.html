@@ -10,28 +10,49 @@
   </head>
   <body>
     <h1 class="centered">VRChat Photo Manager</h1>
+    <div>
+      <button id="tabLogs" class="tab tab-selected" onclick="selectTab('tabLogs', 'terminalBlock')">Logs</button>
+      <button id="tabSettings" class="tab" onclick="selectTab('tabSettings', 'settingsBlock')">Settings</button>
+    </div>
     <!--form with login details and a save login button-->
-    <form class="centered">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" /><br/>
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" /><br/>
-      <label for="username">2FA Token:</label>
-      <input type="text" name="token" id="token" /><br/>
-      
-      <input type="button" onclick="loginButton()" value="Login" />
-      <input type="button" onclick="verify2fa()" value="Verify 2FA" /> 
-      <br/>
-      <label for="webhook">Webhook:</label>
-      <input type="password" name="webhook" id="webhook" /><br/>
-      
-      <input type="button" onclick="saveButton()" value="Save Details" />
-      <input type="button" onclick="openConfig()" value="Open Config Folder" />
-      
-    </form>
-    <p><b>WARNING: Currently, saved login information is stored as <i>plaintext</i>.</b></p>
-    <div id="terminal"></div>
+    <div id="settingsBlock" class="tab-body" style="display:none;">
+      <form class="centered">
+
+            <label class="settings-label" for="username">Username:</label>
+            <input class="settings-input" type="text" name="username" id="username" placeholder="VRChat Username"/><br />
+
+            <label class="settings-label" for="password">Password:</label></td>
+            <input class="settings-input" type="password" name="password" id="password" placeholder="VRChat Password" /><br />
+
+            <label class="settings-label" for="username">2FA Token:</label>
+            <input class="settings-input" type="text" name="token" id="token" placeholder="2FA Token"/><br />
+
+        <input class="button" type="button" onclick="loginButton()" value="Login" />
+        <input class="button" type="button" onclick="verify2fa()" value="Verify 2FA" /> 
+        <br/>
+        <label class="settings-label" for="webhook">Webhook:</label>
+        <input class="settings-input" type="password" name="webhook" id="webhook" placeholder="Discord Webhook"/><br/>
+       
+        <label class="settings-label" for="photopath">Photo Path:</label>
+        <input class="settings-input" type="text" name="photopath" id="photopath" placeholder="C:\Users\Gamer\Pictures\VRChat..."/><br/>
+        
+        <input class="button" type="button" onclick="saveButton()" value="Save Details" />
+        <input class="button" type="button" onclick="openConfig()" value="Open Config Folder" />
+        
+      </form>
+      <p><b>WARNING: Currently, saved login information is stored as <i>plaintext</i>.</b></p>
+    </div>
+    <div class="tab-body" id="terminalBlock">
+      <div id="terminal" style="width: inherit;"></div>
+    </div>
+
+
     <p><b>Work in progress... </b> Made by Yernemm. v0.3</p>
 
   </body>
+  <style>
+    button {
+      width: 100%;
+    }
+  </style>
 </html>
