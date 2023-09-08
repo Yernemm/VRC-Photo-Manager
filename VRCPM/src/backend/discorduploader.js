@@ -17,15 +17,18 @@ this.startWebhook = (url) => {
     main.log("[DU] Webhook started");
 }
 
-this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date) => {
+this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date, moreInfo = null) => {
     let whcontent = "New photo by " + vrcName + " in " + vrcWorld + " <t:" + date + ":R>\n<https://vrchat.com/home/world/" + vrcWorldId + ">";
+
+    if(moreInfo)
+        whcontent += "\n" + moreInfo;
 
     main.log("[DU] Uploading image to webhook\n" + whcontent);
 
     qr.scan(imagePath, (qrRes)=>{
         let qrDesc = ""
         if(qrRes){
-            qrDesc = "\nQR Scan: " + qrRes;
+            qrDesc = "\n**[QR Scan]**: " + qrRes;
         }
 
         

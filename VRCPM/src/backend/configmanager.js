@@ -42,6 +42,10 @@ function reloadConfig(){
     config = require(appdata + "\\Yernemm\\VRCPM\\config1.json");
 }
 
+function mergeConfig(newConfig){
+    config = {...config, ...newConfig};
+}
+
 function setConfig(username, password, webhook){
     main.log("[CM] Setting config...");
     config = {username, password, webhook};
@@ -73,4 +77,4 @@ function save2fa(fa){
 }
 
 
-module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, save2fa};
+module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, save2fa, mergeConfig};

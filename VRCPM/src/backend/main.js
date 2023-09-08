@@ -2,6 +2,7 @@ let duploader;duploader
 let fwatcher;
 let vrchatapi;
 let cfg;
+var pngitxt = require('png-itxt');
 
 let stuffStarted = false;
 
@@ -11,9 +12,14 @@ const {ipcMain} = require('electron');
 
 let mainWindow = undefined;
 
-function onDetect(path){
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
+
+async function onDetect(path){
     log("[MAIN] Photo detected.");
     console.log("hi");
+    await delay(1000);
     fs.stat(path, (err, stats) => {
 
         if(err){
@@ -23,8 +29,29 @@ function onDetect(path){
 
         console.log(stats);
         
-        duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
+        //Read VRCX Desciption
+        fs.createReadStream(path)
+        .pipe(pngitxt.getitxt( 'Description', (err,data)=>{
+            if(err){
+                duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
+            }else{
+                try{
+                    let desc = JSON.parse(data.value);
+                    let moreInfo = "**[VRCX]** Users: `";
+                    desc.players.forEach(player => {moreInfo += player.displayName + ", "})
+                    moreInfo = moreInfo.slice(0, -2);
+                    moreInfo += "`";
 
+                    duploader.uploadImage(path, desc.author.displayName, desc.world.name, desc.world.id, Math.floor(stats.mtimeMs / 1000), moreInfo);
+
+                }catch{
+                    duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
+                }
+                
+            }
+        } ))
+        
+        
     });
 }
 
@@ -46,9 +73,11 @@ async function main(window){
                                                                                              
     `)
 
-    log("VRCPM Version 0.3.0");
+    log("VRCPM Version 0.4.0");
     log("Changes:");
-    log("-Added automatic QR Code scanning");
+    log("-Visual Redesign");
+    log("-Setting to pick a custom photos folder");
+    log("-Added support for VRCX Screenshot Helper data");
     log(`
 =============================================\u001b[0m`)
 
@@ -117,9 +146,18 @@ ipcMain.on("login-button", (event, details) =>{
 
 ipcMain.on("save-button", (event, details) =>{
     log("[MAIN] Save button pressed.");
+    let newValues = pruneObject(details);
+    cfg.mergeConfig(newValues);
+    log("[MAIN] Setting new values for: " + Object.keys(newValues));
     cfg.saveConfig();
 });
 
+function pruneObject(object){
+    let newObj = {...object};
+    Object.keys(newObj).forEach(
+        (key) => (newObj[key] === "") && delete newObj[key]);
+    return newObj;
+}
 
 
 

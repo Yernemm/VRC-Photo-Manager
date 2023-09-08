@@ -12,7 +12,7 @@ const configuration = new vrchat.Configuration({
 });
 const axiosConfiguration = axios.create({
     headers: {
-        'User-Agent': 'vrc-photo-manager/0.2.1 yrnemmizer@gmail.com'
+        'User-Agent': 'vrc-photo-manager/0.4 yrnemmizer@gmail.com'
     }
 });
 

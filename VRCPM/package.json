@@ -32,6 +32,7 @@
     "html5-qrcode": "^2.3.8",
     "jimp": "^0.22.10",
     "jsqr": "^1.4.0",
+    "png-itxt": "^2.0.0",
     "qrcode-reader": "^1.0.4",
     "update-electron-app": "^2.0.1",
     "vrchat": "^1.7.2",
