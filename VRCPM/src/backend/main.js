@@ -83,12 +83,13 @@ async function main(window){
                                                                                              
     `)
 
-    log("VRCPM Version 0.4.0");
+    log("VRCPM Version 0.4.1");
     log("Changes:");
-    log("-Visual Redesign");
-    log("-Added a custom photo folder setting");
-    log("-Added support for VRCX Screenshot Helper data");
-    log("-New icon");
+    log("-Added a check to ignore new VRCX prints and stickers.");
+    //log("-Visual Redesign");
+    //log("-Added a custom photo folder setting");
+    //log("-Added support for VRCX Screenshot Helper data");
+    //log("-New icon");
     log(`
 =============================================\u001b[0m`)
 

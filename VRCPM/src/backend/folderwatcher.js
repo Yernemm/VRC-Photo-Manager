@@ -23,6 +23,14 @@ this.watch = (onDetect) =>{
     folder = actualFolder
     chokidar.watch(folder, {ignoreInitial: true})
         .on('add' ,path =>{
+            if(path.includes("\\Prints\\")) {
+                main.log("[FW] Detected new print. Ignoring.");
+                return;
+            }
+            if(path.includes("\\Stickers\\")) {
+                main.log("[FW] Detected new sticker. Ignoring.");
+                return;
+            }
             main.log("[FW] Detected new photo: " + path);
             onDetect(path);
         });
