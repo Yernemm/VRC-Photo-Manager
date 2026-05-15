@@ -49,6 +49,10 @@ async function onDetect(path){
                         moreInfo = moreInfo.slice(0, -2);
                         moreInfo += "`";
 
+                        lastUser = desc.author.displayName;
+                        lastWorld = desc.world.name;
+                        lastWorldId = desc.world.id;
+
                         duploader.uploadImage(path, desc.author.displayName, desc.world.name, desc.world.id, Math.floor(stats.mtimeMs / 1000), moreInfo);
 
                     }catch{
@@ -66,7 +70,7 @@ async function onDetect(path){
 }
 
 function uploadNonVrcx(stats, path){
-    duploader.uploadImage(path, "Unknown", "an unknown world", "0000", Math.floor(stats.mtimeMs / 1000));
+    duploader.uploadImage(path, lastUser, lastWorld, lastWorldId, Math.floor(stats.mtimeMs / 1000));
 }
 
 
@@ -88,9 +92,10 @@ async function main(window){
                                                                                              
     `)
 
-    log("VRCPM Version 0.4.1");
+    log("VRCPM Version 0.5.0");
     log("Changes:");
-    log("-Added a check to ignore new VRCX prints and stickers.");
+    log("-Removed VRChat login; metadata now comes only from VRCX data.");
+    log("-Photos without VRCX data reuse the last known author/world.");
     //log("-Visual Redesign");
     //log("-Added a custom photo folder setting");
     //log("-Added support for VRCX Screenshot Helper data");
