@@ -15,21 +15,9 @@ function localLog(message){
     term.writeln("[RENDERER] " + message);
 }
 
-function loginButton(){
-    localLog("Login button pressed.");
-    ipcRenderer.send("login-button", {
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value,
-        webhook: document.getElementById("webhook").value
-    });
-
-}
-
 function saveButton(){
     localLog("Save button pressed.");
     ipcRenderer.send("save-button", {
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value,
         webhook: document.getElementById("webhook").value,
         photopath: document.getElementById("photopath").value
     });
@@ -38,11 +26,6 @@ function saveButton(){
 function openConfig(){
     localLog("Open config button pressed.");
     ipcRenderer.send("open-config");
-}
-
-function verify2fa(){
-    localLog("Verify 2FA button pressed.");
-    ipcRenderer.send("verify2fa", document.getElementById("token").value);
 }
 
 ipcRenderer.send("ready");

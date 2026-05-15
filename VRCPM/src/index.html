@@ -14,22 +14,10 @@
       <button id="tabLogs" class="tab tab-selected" onclick="selectTab('tabLogs', 'terminalBlock')">Logs</button>
       <button id="tabSettings" class="tab" onclick="selectTab('tabSettings', 'settingsBlock')">Settings</button>
     </div>
-    <!--form with login details and a save login button-->
+    <!--form with the discord webhook and photo path settings-->
     <div id="settingsBlock" class="tab-body" style="display:none;">
       <form class="centered">
-            
-            <label class="settings-label" for="username">Username:</label>
-            <input class="settings-input" type="text" name="username" id="username" placeholder="VRChat Username"/><br />
 
-            <label class="settings-label" for="password">Password:</label></td>
-            <input class="settings-input" type="password" name="password" id="password" placeholder="VRChat Password" /><br />
-
-            <label class="settings-label" for="username">2FA Token:</label>
-            <input class="settings-input" type="text" name="token" id="token" placeholder="2FA Token"/><br />
-
-        <input class="button" type="button" onclick="loginButton()" value="Login" />
-        <input class="button" type="button" onclick="verify2fa()" value="Verify 2FA" /> 
-        <br/>
         <label class="settings-label" for="webhook">Webhook:</label>
         <input class="settings-input" type="password" name="webhook" id="webhook" placeholder="Discord Webhook"/><br/>
        
@@ -40,7 +28,7 @@
         <input class="button" type="button" onclick="openConfig()" value="Open Config Folder" />
         
       </form>
-      <p><b>WARNING: Currently, saved login information is saved locally as <i>plaintext</i>.</b></p>
+      <p>Photo metadata is read from VRCX data embedded in each image.</p>
       <p>You may need to restart this program for changes to apply.</p>
     </div>
     <div class="tab-body" id="terminalBlock">

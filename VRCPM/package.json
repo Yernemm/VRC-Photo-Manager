@@ -35,7 +35,6 @@
     "png-itxt": "^2.0.0",
     "qrcode-reader": "^1.0.4",
     "update-electron-app": "^2.0.1",
-    "vrchat": "^1.7.2",
     "xterm": "^4.19.0"
   },
   "devDependencies": {

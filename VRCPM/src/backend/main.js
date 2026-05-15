@@ -1,6 +1,5 @@
 let duploader;duploader
 let fwatcher;
-let vrchatapi;
 let cfg;
 var pngitxt = require('png-itxt');
 
@@ -11,6 +10,12 @@ const fs = require('fs');
 const {ipcMain} = require('electron');
 
 let mainWindow = undefined;
+
+// Last known author/world, cached from VRCX metadata so photos
+// without their own metadata can reuse it instead of "Unknown".
+let lastUser = "Unknown";
+let lastWorld = "an unknown world";
+let lastWorldId = "0000";
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -61,7 +66,7 @@ async function onDetect(path){
 }
 
 function uploadNonVrcx(stats, path){
-    duploader.uploadImage(path, vrchatapi.getUser(), vrchatapi.getCurrentWorld(), vrchatapi.getCurrentWorldId(), Math.floor(stats.mtimeMs / 1000));
+    duploader.uploadImage(path, "Unknown", "an unknown world", "0000", Math.floor(stats.mtimeMs / 1000));
 }
 
 
@@ -96,7 +101,7 @@ async function main(window){
     if(cfg.isLoaded()){
         startWithConfig();
     }else{
-        log("[MAIN] No saved config found. Please log in.");
+        log("[MAIN] No saved config found. Please set your Discord webhook in Settings.");
     }
 
 
@@ -134,27 +139,10 @@ function startWithConfig(){
 
     duploader = require('./discorduploader');
     fwatcher = require('./folderwatcher');
-    vrchatapi = require('./vrchatapi');
 
     duploader.startWebhook(cfg.getConfig().webhook);
     fwatcher.watch(onDetect);
-
-    setTimeout(() => {
-        
-        log("[MAIN] " + vrchatapi.getCurrentWorld());
-    }, 3000);
 }
-
-ipcMain.on("login-button", (event, details) =>{
-    log("[MAIN] Login button pressed.");
-    cfg.setConfig(
-        details.username,
-        details.password,
-        details.webhook
-    );
-
-    startWithConfig();
-})
 
 ipcMain.on("save-button", (event, details) =>{
     log("[MAIN] Save button pressed.");

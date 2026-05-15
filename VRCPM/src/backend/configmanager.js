@@ -25,10 +25,8 @@ if (!fs.existsSync(appdata + "\\Yernemm\\VRCPM\\config1.json")) {
 
 let config = require(appdata + "\\Yernemm\\VRCPM\\config1.json");
 
-function writeConfig(username, password, webhook){
+function writeConfig(webhook){
     main.log("[CM] Writing config...");
-    config.username = username;
-    config.password = password;
     config.webhook = webhook;
     fs.writeFileSync(appdata + "\\Yernemm\\VRCPM\\config1.json", JSON.stringify(config));
 }
@@ -46,9 +44,9 @@ function mergeConfig(newConfig){
     config = {...config, ...newConfig};
 }
 
-function setConfig(username, password, webhook){
+function setConfig(webhook){
     main.log("[CM] Setting config...");
-    config = {username, password, webhook};
+    config = {webhook};
 }
 
 function saveConfig(){
@@ -61,7 +59,7 @@ function saveConfig(){
 }
 
 function isLoaded(){
-    return config.username != undefined && config.password != undefined && config.webhook != undefined;
+    return config.webhook != undefined;
 }
 
 ipcMain.on("open-config", (event, details) =>{
@@ -70,11 +68,4 @@ ipcMain.on("open-config", (event, details) =>{
     require('child_process').exec('explorer ' + appdata + "\\Yernemm\\VRCPM");
 });
 
-function save2fa(fa){
-    main.log("[CM] Saving 2FA...");
-    config = {...config, fa};
-    saveConfig();
-}
-
-
-module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, save2fa, mergeConfig};
+module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, mergeConfig};
