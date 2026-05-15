@@ -18,7 +18,7 @@ this.startWebhook = (url) => {
 }
 
 this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date, moreInfo = null) => {
-    let whcontent = "New photo by " + vrcName + " in " + vrcWorld + " <t:" + date + ":R>\n<https://vrchat.com/home/world/" + vrcWorldId + ">";
+    let whcontent = "New photo by **" + vrcName + "** in [" + vrcWorld + "](<https://vrchat.com/home/world/" + vrcWorldId + ">) <t:" + date + ":R>";
 
     if(moreInfo)
         whcontent += "\n" + moreInfo;

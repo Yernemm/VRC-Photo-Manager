@@ -21,11 +21,66 @@ function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
 
+// Read every iTXt chunk in a single pass and return them keyed by keyword.
+// VRChat writes the "Author"/"WorldID"/"WorldDisplayName" tags
+// VRCX creates the big "Description" JSON blob (the only one carrying the
+// full player list), so we grab them all and decide afterwards.
+function readItxtChunks(path){
+    return new Promise((resolve) => {
+        let chunks = {};
+        let done = false;
+        let finish = () => { if(!done){ done = true; resolve(chunks); } };
+
+        let stream = fs.createReadStream(path);
+        // Passing no keyword makes the callback fire once per iTXt chunk.
+        let duplex = stream.pipe(pngitxt.getitxt((err, data) => {
+            if(!err && data && data.keyword){
+                chunks[data.keyword] = data.value;
+            }
+        }));
+
+        // Drain the encoder side so the stream keeps flowing past IDAT.
+        duplex.resume();
+        duplex.on('finish', finish);
+        duplex.on('end', finish);
+        duplex.on('error', finish);
+        stream.on('error', finish);
+    });
+}
+
+// VRChat embeds its native author/world tags as XMP XML inside the single
+// "XML:com.adobe.xmp" iTXt chunk, not as separate keyworded chunks.
+function unescapeXml(s){
+    return s
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+        .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)))
+        .replace(/&amp;/g, '&');
+}
+
+function xmpTag(xmp, localName){
+    // Match <ns:LocalName>value</ns:LocalName> for any namespace prefix.
+    let m = xmp.match(new RegExp('<\\w+:' + localName + '>([\\s\\S]*?)</\\w+:' + localName + '>'));
+    return m ? unescapeXml(m[1].trim()) : undefined;
+}
+
+function parseVrcXmp(xmp){
+    if(!xmp) return {};
+    return {
+        author: xmpTag(xmp, 'Author'),
+        world: xmpTag(xmp, 'WorldDisplayName'),
+        worldId: xmpTag(xmp, 'WorldID')
+    };
+}
+
 async function onDetect(path){
     log("[MAIN] Photo detected.");
     console.log("hi");
     await delay(1000);
-    fs.stat(path, (err, stats) => {
+    fs.stat(path, async (err, stats) => {
 
         if(err){
             error("M-001", "Error getting file stats.");
@@ -33,39 +88,61 @@ async function onDetect(path){
         }
 
         console.log(stats);
-        
-        //Read VRCX Desciption
+
         //Ignore non-pngs
-        if(path.endsWith('.png')){
-            fs.createReadStream(path)
-            .pipe(pngitxt.getitxt( 'Description', (err,data)=>{
-                if(err){
-                    uploadNonVrcx(stats, path);
-                }else{
-                    try{
-                        let desc = JSON.parse(data.value);
-                        let moreInfo = "**[VRCX]** Users: `";
-                        desc.players.forEach(player => {moreInfo += player.displayName + ", "})
-                        moreInfo = moreInfo.slice(0, -2);
-                        moreInfo += "`";
-
-                        lastUser = desc.author.displayName;
-                        lastWorld = desc.world.name;
-                        lastWorldId = desc.world.id;
-
-                        duploader.uploadImage(path, desc.author.displayName, desc.world.name, desc.world.id, Math.floor(stats.mtimeMs / 1000), moreInfo);
-
-                    }catch{
-                        uploadNonVrcx(stats, path);
-                    }
-                    
-                }
-            } ))
-        }else{
+        if(!path.endsWith('.png')){
             uploadNonVrcx(stats, path);
+            return;
         }
-        
-        
+
+        let chunks = await readItxtChunks(path);
+
+        console.log(chunks);
+
+        // Built-in VRChat XMP tags take precedence; only fall back to
+        // Description for any of these that weren't present.
+        let builtin = parseVrcXmp(chunks['XML:com.adobe.xmp']);
+        let author = builtin.author;
+        let world = builtin.world;
+        let worldId = builtin.worldId;
+
+        let moreInfo = null;
+
+        // Description carries the full player list and serves as the
+        // fallback source for author/world when the tags above are missing.
+        if(chunks['Description']){
+            try{
+                let desc = JSON.parse(chunks['Description']);
+
+                //console.log(desc);
+
+                if(Array.isArray(desc.players) && desc.players.length){
+                    moreInfo = "**[VRCX]** Users: `";
+                    desc.players.forEach(player => {moreInfo += player.displayName + ", "});
+                    moreInfo = moreInfo.slice(0, -2);
+                    moreInfo += "`";
+                }
+
+                if(!author && desc.author) author = desc.author.displayName;
+                if(!world && desc.world) world = desc.world.name;
+                if(!worldId && desc.world) worldId = desc.world.id;
+            }catch{
+                // Malformed Description: keep whatever the built-in tags gave us.
+            }
+        }
+
+        // No VRCX/VRChat metadata at all -> reuse last known author/world.
+        if(!author && !world && !worldId){
+            uploadNonVrcx(stats, path);
+            return;
+        }
+
+        // Cache resolved values for later photos that lack metadata.
+        if(author) lastUser = author;
+        if(world) lastWorld = world;
+        if(worldId) lastWorldId = worldId;
+
+        duploader.uploadImage(path, lastUser, lastWorld, lastWorldId, Math.floor(stats.mtimeMs / 1000), moreInfo);
     });
 }
 
@@ -94,8 +171,8 @@ async function main(window){
 
     log("VRCPM Version 0.5.0");
     log("Changes:");
-    log("-Removed VRChat login; metadata now comes only from VRCX data.");
-    log("-Photos without VRCX data reuse the last known author/world.");
+    log("-Removed VRChat login. metadata now comes only from VRCX data and built-in VRChat tags.");
+    log("-Photos without data reuse the last known author/world.");
     //log("-Visual Redesign");
     //log("-Added a custom photo folder setting");
     //log("-Added support for VRCX Screenshot Helper data");
