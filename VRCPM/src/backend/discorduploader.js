@@ -34,6 +34,7 @@ this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date, moreInfo = n
         
     this.webhook.send({
         username: vrcName + " (VRChat)",
+        avatarURL: "https://yernemm.xyz/vrcpm.png",
         content: whcontent + qrDesc,
         files: [{
             
