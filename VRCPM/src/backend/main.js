@@ -169,7 +169,7 @@ async function main(window){
                                                                                              
     `)
 
-    log("VRCPM Version 0.5.0");
+    log("VRCPM Version 0.5.1");
     log("Changes:");
     log("-Removed VRChat login. metadata now comes only from VRCX data and built-in VRChat tags.");
     log("-Photos without data reuse the last known author/world.");

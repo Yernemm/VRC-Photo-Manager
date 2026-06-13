@@ -39,7 +39,7 @@ this.uploadImage = (imagePath, vrcName, vrcWorld, vrcWorldId, date, moreInfo = n
         files: [{
             
             attachment: imagePath,
-            name: + new Date() + ".png"
+            name: imagePath.split("/").pop()
         }]
     })
     .catch(e =>{
