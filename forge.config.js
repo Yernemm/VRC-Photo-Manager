@@ -24,6 +24,20 @@ module.exports = {
         ]
       },
       {
+        name: "@reforged/maker-appimage",
+        platforms: [
+          "linux"
+        ],
+        config: {
+          options: {
+            // Forge names the binary after productName on Linux.
+            bin: "VRChat Photo Manager",
+            categories: ["Graphics", "Utility"],
+            icon: "src/images/icon.png"
+          }
+        }
+      },
+      {
         name: "@electron-forge/maker-deb",
         config: {}
       },
