@@ -1,6 +1,6 @@
-let token = { token: "" };
+// Only needed for manual `npm run publish`; CI uploads releases itself.
+let token = { token: process.env.GITHUB_TOKEN || "" };
 try {
-  // Token only needed for github publishing
   token = require("./githubtoken.json");
 } catch {
 }
@@ -55,7 +55,8 @@ module.exports = {
                 name: 'VRC-Photo-Manager',
               },
               authToken: token.token,
-              prerelease: true
+              // update-electron-app (Windows) ignores pre-releases.
+              prerelease: false
             }
           }
     ]

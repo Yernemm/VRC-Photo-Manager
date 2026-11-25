@@ -1,0 +1,122 @@
+name: Release
+
+# Every push to main is checked; a release is only made when the version in
+# package.json is greater than the latest published release.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.compare.outputs.release }}
+      version: ${{ steps.compare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare package.json version with the latest release
+        id: compare
+        run: |
+          cur=$(node -p "require('./package.json').version")
+          latest=$(gh release view --json tagName -q .tagName 2>/dev/null || true)
+          latest=${latest#v}
+          echo "package.json: $cur, latest release: ${latest:-none}"
+
+          release=false
+          if [ -z "$latest" ]; then
+            release=true
+          elif [ "$latest" != "$cur" ] && [ "$(printf '%s\n%s\n' "$latest" "$cur" | sort -V | tail -n1)" = "$cur" ]; then
+            release=true
+          fi
+
+          # Never reuse a tag that already exists.
+          if [ -n "$(git ls-remote --tags origin "refs/tags/v$cur")" ]; then
+            echo "Tag v$cur already exists."
+            release=false
+          fi
+
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "version=$cur" >> "$GITHUB_OUTPUT"
+          echo "Release needed: $release"
+
+      # Builds upload into a draft so nobody (including the in-app updaters)
+      # sees a half-finished release. The tag is created when it is published.
+      - name: Create draft release
+        if: steps.compare.outputs.release == 'true'
+        run: |
+          tag="v${{ steps.compare.outputs.version }}"
+          # Remove a draft left over from a failed earlier run.
+          if [ "$(gh release view "$tag" --json isDraft -q .isDraft 2>/dev/null)" = "true" ]; then
+            gh release delete "$tag" --yes
+          fi
+          gh release create "$tag" --draft --target "$GITHUB_SHA" --title "$tag" --generate-notes
+
+  build:
+    needs: check
+    if: needs.check.outputs.release == 'true'
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      VERSION: ${{ needs.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22 (npm 10) runs install scripts; newer npm blocks electron-winstaller's.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install AppImage build tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y squashfs-tools
+
+      - name: Build AppImage
+        if: runner.os == 'Linux'
+        run: |
+          npx electron-forge make --targets @reforged/maker-appimage
+          mkdir dist
+          name="VRChat-Photo-Manager-$VERSION-x64.AppImage"
+          cp out/make/AppImage/x64/*.AppImage "dist/$name"
+          # The in-app Linux updater looks for "<AppImage name>.sha256".
+          (cd dist && sha256sum "$name" > "$name.sha256")
+
+      - name: Build Windows installer
+        if: runner.os == 'Windows'
+        run: |
+          npx electron-forge make --targets @electron-forge/maker-squirrel
+          dir=out/make/squirrel.windows/x64
+          mkdir dist
+          # RELEASES and the .nupkg files are what the Squirrel auto-updater reads.
+          cp "$dir"/RELEASES "$dir"/*.nupkg dist/
+          cp "$dir"/*Setup.exe "dist/VRChat-Photo-Manager-Setup-$VERSION.exe"
+
+      - name: Upload to draft release
+        run: gh release upload "v$VERSION" dist/* --clobber
+
+  publish:
+    needs: [check, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish release
+        run: gh release edit "v${{ needs.check.outputs.version }}" --repo "$GITHUB_REPOSITORY" --draft=false --latest
