@@ -10,6 +10,10 @@
   </head>
   <body>
     <h1 class="centered">VRChat Photo Manager</h1>
+    <div id="updateBanner" class="update-banner" style="display:none;">
+      <span id="updateText"></span>
+      <a id="updateLink" href="#" style="display:none;">Open release page</a>
+    </div>
     <div>
       <button id="tabLogs" class="tab tab-selected" onclick="selectTab('tabLogs', 'terminalBlock')">Logs</button>
       <button id="tabSettings" class="tab" onclick="selectTab('tabSettings', 'settingsBlock')">Settings</button>
@@ -36,7 +40,7 @@
     </div>
 
 
-    <p><b>Work in progress... </b> Made by Yernemm. v0.5.1</p>
+    <p><b>Work in progress... </b> Made by Yernemm. v<span id="appVersion"></span></p>
 
   </body>
   <style>

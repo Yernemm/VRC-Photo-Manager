@@ -11,6 +11,20 @@ ipcRenderer.on("console-log", (event, arg) => {
     term.writeln(arg);
 });
 
+ipcRenderer.on("update-available", (event, update) => {
+    document.getElementById("updateText").textContent = update.message + " ";
+    // Only Linux/other platforms need a manual download link.
+    if(!update.autoUpdates && update.url.startsWith("https://github.com/Yernemm/")){
+        let link = document.getElementById("updateLink");
+        link.style.display = "inline";
+        link.onclick = (e) => {
+            e.preventDefault();
+            require('electron').shell.openExternal(update.url);
+        };
+    }
+    document.getElementById("updateBanner").style.display = "block";
+});
+
 function localLog(message){
     term.writeln("[RENDERER] " + message);
 }
@@ -27,6 +41,8 @@ function openConfig(){
     localLog("Open config button pressed.");
     ipcRenderer.send("open-config");
 }
+
+document.getElementById("appVersion").textContent = require('../package.json').version;
 
 ipcRenderer.send("ready");
 

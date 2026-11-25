@@ -17,6 +17,12 @@ let lastUser = "Unknown";
 let lastWorld = "an unknown world";
 let lastWorldId = "0000";
 
+
+const latestChanges = [
+    "Early Linux support",
+    "Version change notifications"
+]
+
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
@@ -155,6 +161,8 @@ async function main(window){
 
     
 
+    
+
     mainWindow = window;
     cfg = require('./configmanager');
     log(`\u001b[94m
@@ -170,13 +178,9 @@ async function main(window){
     `)
 
     log("VRCPM Version " + require('../../package.json').version);
+    notifyIfUpdateAvailable();
     log("Changes:");
-    log("-Removed VRChat login. metadata now comes only from VRCX data and built-in VRChat tags.");
-    log("-Photos without data reuse the last known author/world.");
-    //log("-Visual Redesign");
-    //log("-Added a custom photo folder setting");
-    //log("-Added support for VRCX Screenshot Helper data");
-    //log("-New icon");
+    latestChanges.forEach(change => log(" - " + change));
     log(`
 =============================================\u001b[0m`)
 
@@ -187,6 +191,20 @@ async function main(window){
     }
 
 
+}
+
+// Windows installs update themselves in the background (see index.js);
+// on other platforms the user has to download the new release.
+async function notifyIfUpdateAvailable(){
+    let update = await require('./updatecheck').checkForUpdate();
+    if(!update) return;
+
+    let autoUpdates = process.platform === 'win32';
+    let message = `Version ${update.version} is available.` + (autoUpdates
+        ? " It will download automatically and be installed after you restart."
+        : "");
+    alert(autoUpdates ? message : `${message} Download it from ${update.url}`);
+    mainWindow.webContents.send('update-available', { ...update, autoUpdates, message });
 }
 
 function log(message){

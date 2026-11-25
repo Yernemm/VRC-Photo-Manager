@@ -81,3 +81,16 @@ input[type=text], input[type=password]{
 .settings-input {
   width: 80%;
 }
+
+.update-banner {
+  background-color: #dfaf11;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  font-size: medium;
+  color: #161616;
+  border-radius: 3px;
+}
+
+.update-banner a {
+  color: rgb(150, 32, 5);
+}
