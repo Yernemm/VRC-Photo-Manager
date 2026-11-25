@@ -6,7 +6,7 @@ Still a work-in-progress project. Many core features are not ready yet.
 
 ------
 
-### Instructions:
+### Usage Instructions:
 
 - [Download the setup exe from the latest release here](https://github.com/Yernemm/VRC-Photo-Manager/releases)
 - Open the program
@@ -31,3 +31,38 @@ Still a work-in-progress project. Many core features are not ready yet.
 - Multiple webhook support
 - Rotate photos
 - More secure login storage (tokens?)
+
+------
+
+### Building:
+
+The program is is made with [Electron Forge](https://www.electronforge.io/).
+
+#### Prerequisites
+
+- [Node.js](https://nodejs.org/) and npm. 
+
+#### Setup
+
+Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+#### Run in development
+
+```sh
+npm start
+```
+
+This launches the Electron app directly from source, without packaging it.
+
+#### Build distributables
+
+```sh
+npm run package   # unpacked app in out/
+npm run make      # installers (Squirrel on Windows, .deb/.rpm on Linux, .zip on macOS) in out/make/
+```
+
+
