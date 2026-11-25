@@ -6,6 +6,7 @@ var pngitxt = require('png-itxt');
 let stuffStarted = false;
 
 const fs = require('fs');
+const linuxUpdater = require('./linuxupdater');
 
 const {ipcMain} = require('electron');
 
@@ -178,6 +179,7 @@ async function main(window){
     `)
 
     log("VRCPM Version " + require('../../package.json').version);
+    linuxUpdater.cleanupOldVersion();
     notifyIfUpdateAvailable();
     log("Changes:");
     latestChanges.forEach(change => log(" - " + change));
@@ -200,11 +202,26 @@ async function notifyIfUpdateAvailable(){
     if(!update) return;
 
     let autoUpdates = process.platform === 'win32';
-    let message = `Version ${update.version} is available.` + (autoUpdates
-        ? " It will download automatically and be installed after you restart."
-        : "");
+    let message = `Version ${update.version} is available.`;
+
+    if(autoUpdates){
+        message += " It will download automatically and be installed after you restart.";
+    }else if(linuxUpdater.canSelfUpdate()){
+        // Linux AppImage: download now, swap the file in on next launch.
+        try {
+            log(`[UPDATER] Downloading version ${update.version}...`);
+            await linuxUpdater.downloadUpdate(update);
+            autoUpdates = true;
+            message = `Version ${update.version} has been downloaded. It will be installed after you restart.`;
+        } catch(e) {
+            error("UPD", "Could not download the update automatically: " + e.message);
+        }
+    }
+
     alert(autoUpdates ? message : `${message} Download it from ${update.url}`);
-    mainWindow.webContents.send('update-available', { ...update, autoUpdates, message });
+    mainWindow.webContents.send('update-available', {
+        version: update.version, url: update.url, autoUpdates, message
+    });
 }
 
 function log(message){

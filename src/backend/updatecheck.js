@@ -28,7 +28,7 @@ async function checkForUpdate(){
         let release = await res.json();
         let latest = String(release.tag_name || "").replace(/^v/i, "");
         if(!latest || !isNewer(latest, currentVersion)) return null;
-        return { version: latest, url: release.html_url };
+        return { version: latest, url: release.html_url, assets: release.assets || [] };
     } catch {
         return null;
     }

@@ -1,11 +1,20 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-require('update-electron-app').updateElectronApp()
+// Electron's built-in updater has no Linux support; the AppImage build uses
+// src/backend/linuxupdater.js instead.
+if (process.platform !== 'linux') {
+  require('update-electron-app').updateElectronApp()
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) {
   app.quit();
+}
+
+// Linux AppImage: if a downloaded update is waiting, swap it in and relaunch.
+if (require('./backend/linuxupdater').applyPendingUpdate()) {
+  app.exit(0);
 }
 
 const createWindow = () => {
