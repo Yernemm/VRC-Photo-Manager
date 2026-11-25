@@ -36,7 +36,7 @@ Still a work-in-progress project. Many core features are not ready yet.
 
 ### Building:
 
-The program is is made with [Electron Forge](https://www.electronforge.io/).
+The program is made with [Electron Forge](https://www.electronforge.io/).
 
 #### Prerequisites
 

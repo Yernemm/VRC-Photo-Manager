@@ -1,4 +1,9 @@
-const token = require("./githubtoken.json");
+let token = { token: "" };
+try {
+  // Token only needed for github publishing
+  token = require("./githubtoken.json");
+} catch {
+}
 
 module.exports = {
     packagerConfig: {
