@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=VRChat Photo Manager
+GenericName=VRChat Photo Manager
+Comment=Manage and upload your VRChat photos
+Exec="VRChat Photo Manager" %U
+Icon=vrcpm
+Categories=Utility;
+Keywords=VRChat;VRCX;photos;screenshots;Discord;
+X-AppImage-Name=vrcpm

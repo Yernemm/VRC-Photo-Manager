@@ -30,9 +30,8 @@ module.exports = {
         ],
         config: {
           options: {
-            // Forge names the binary after productName on Linux.
             bin: "VRChat Photo Manager",
-            categories: ["Graphics", "Utility"],
+            desktopFile: "linux/vrcpm.desktop",
             icon: "src/images/icon.png"
           }
         }
