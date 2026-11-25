@@ -2,7 +2,7 @@
   "name": "vrcpm",
   "productName": "VRChat Photo Manager",
   "desktopName": "vrcpm.desktop",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "A program which will embed world metadata into your vrchat photos and let you edit them and upload to Discord.",
   "main": "src/index.js",
   "scripts": {
