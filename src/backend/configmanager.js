@@ -78,4 +78,12 @@ ipcMain.on("open-config", (event, details) =>{
     require('electron').shell.openPath(configDir);
 });
 
+// Used by the settings screen to show the currently saved values.
+ipcMain.handle("get-config", () => {
+    return {
+        webhook: config.webhook,
+        photopath: config.photopath
+    };
+});
+
 module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, mergeConfig};

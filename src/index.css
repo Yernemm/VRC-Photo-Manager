@@ -3,8 +3,8 @@ body {
     Arial, sans-serif;
   margin: auto;
   max-width: 720px;
-  background: #333;
-  color: rgb(203, 114, 255);
+  background: #161616;
+  color: rgb(226, 224, 227);
   background-size: 100% 100%;
   background-repeat:no-repeat;
   background-attachment: fixed;
@@ -17,14 +17,22 @@ body {
   text-align: center;
 }
 
+ .button-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
  .button {
   background-color: #424242; /* Green */
   border: none;
   color: rgb(240, 235, 243);
-  padding: 6px 16px;
+  padding: 16px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
   font-size: 24px;
   border-radius: 4px;
   
@@ -35,6 +43,27 @@ body {
  .button:hover {
   box-shadow: 0 4px 6px 0 rgba(0,0,0,0.24), 0 5px 10px 0 rgba(0,0,0,0.19);
   background-color: #923bcc;
+}
+
+ .button.active {
+  background-color: #923bcc;
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.24), 0 5px 10px 0 rgba(0,0,0,0.19);
+}
+
+.photo-frame {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background-color: #2b2b2b;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .tab {
@@ -75,11 +104,22 @@ input[type=text], input[type=password]{
   border-bottom: 2px solid rgb(204, 0, 255);
 }
 
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
 .settings-label {
   width: 20%;
+  flex: none;
 }
 .settings-input {
-  width: 80%;
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .update-banner {

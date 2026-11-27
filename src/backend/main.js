@@ -84,6 +84,7 @@ function parseVrcXmp(xmp){
 }
 
 async function onDetect(path){
+    showPhotoInWindow(path);
     log("[MAIN] Photo detected.");
     console.log("hi");
     await delay(1000);
@@ -151,6 +152,24 @@ async function onDetect(path){
 
         duploader.uploadImage(path, lastUser, lastWorld, lastWorldId, Math.floor(stats.mtimeMs / 1000), moreInfo);
     });
+}
+
+
+async function showPhotoInWindow(filePath){
+    if(!mainWindow) return;
+
+    try{
+        let data = await fs.promises.readFile(filePath);
+        let ext = require('path').extname(filePath).slice(1).toLowerCase() || 'png';
+        if(ext === 'jpg') ext = 'jpeg';
+
+        mainWindow.webContents.send("photo-detected", {
+            path: filePath,
+            dataUrl: `data:image/${ext};base64,${data.toString('base64')}`
+        });
+    }catch(e){
+        error("M-002", "Could not load photo for preview: " + e.message);
+    }
 }
 
 function uploadNonVrcx(stats, path){
@@ -261,12 +280,16 @@ function startWithConfig(){
     fwatcher.watch(onDetect);
 }
 
-ipcMain.on("save-button", (event, details) =>{
+// Returns the saved config so the settings screen can confirm what was stored.
+ipcMain.handle("save-config", (event, details) => {
+    if(!cfg) return null;
+
     log("[MAIN] Save button pressed.");
     let newValues = pruneObject(details);
     cfg.mergeConfig(newValues);
     log("[MAIN] Setting new values for: " + Object.keys(newValues));
     cfg.saveConfig();
+    return cfg.getConfig();
 });
 
 function pruneObject(object){

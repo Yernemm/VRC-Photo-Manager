@@ -1,22 +1,55 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import './index.css';
-import packageJson from '../package.json';
+import MainScreen from './UI/mainScreen.jsx';
+import Settings from './UI/settings.jsx';
 
 const { ipcRenderer, shell } = require('electron');
 
-function App() {
-
-
+function Placeholder({ label, setPage }) {
     return (
         <>
-            <h1 className="centered">VRChat Photo Manager</h1>
-
-            <p><b>Work in progress... </b> Made by Yernemm. v{packageJson.version}</p>
+            <p className="centered">{label} coming soon...</p>
+            <div className="button-row">
+                <button className="button" onClick={() => setPage('main')}>Back</button>
+            </div>
         </>
     );
+}
+
+function App() {
+    const [page, setPage] = useState('main');
+    const [uploadAll, setUploadAll] = useState(false);
+    const [photo, setPhoto] = useState(null);
+
+    useEffect(() => {
+        ipcRenderer.send('ready');
+    }, []);
+
+    // image preview
+    useEffect(() => {
+        const onPhoto = (event, detected) => setPhoto(detected);
+        ipcRenderer.on('photo-detected', onPhoto);
+        return () => ipcRenderer.removeListener('photo-detected', onPhoto);
+    }, []);
+
+    switch (page) {
+        case 'gallery':
+            return <Placeholder label="Gallery" setPage={setPage} />;
+        case 'settings':
+            return <Settings setPage={setPage} />;
+        default:
+            return (
+                <MainScreen
+                    setPage={setPage}
+                    uploadAll={uploadAll}
+                    setUploadAll={setUploadAll}
+                    photo={photo && photo.dataUrl}
+                />
+            );
+    }
 }
 
 createRoot(document.getElementById('root')).render(<App />);
