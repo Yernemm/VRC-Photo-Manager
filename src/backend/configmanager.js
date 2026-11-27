@@ -29,7 +29,11 @@ if (!fs.existsSync(configFile)) {
     fs.writeFileSync(configFile, "{}");
 }
 
-let config = require(configFile);
+function readConfig(){
+    return JSON.parse(fs.readFileSync(configFile, "utf8"));
+}
+
+let config = readConfig();
 
 function writeConfig(webhook){
     main.log("[CM] Writing config...");
@@ -43,7 +47,7 @@ function getConfig(){
 
 function reloadConfig(){
     main.log("[CM] Reloading config...");
-    config = require(configFile);
+    config = readConfig();
 }
 
 function mergeConfig(newConfig){

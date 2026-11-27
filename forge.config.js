@@ -45,6 +45,27 @@ module.exports = {
         config: {}
       }
     ],
+    plugins: [
+      {
+        name: "@electron-forge/plugin-webpack",
+        config: {
+          // The dev server needs inline styles (style-loader, xterm) and eval (source maps).
+          devContentSecurityPolicy: "default-src 'self' 'unsafe-inline' 'unsafe-eval' data:",
+          mainConfig: "./webpack.main.config.js",
+          renderer: {
+            config: "./webpack.renderer.config.js",
+            nodeIntegration: true,
+            entryPoints: [
+              {
+                name: "main_window",
+                html: "./src/index.html",
+                js: "./src/render.jsx"
+              }
+            ]
+          }
+        }
+      }
+    ],
     publishers: [
         {
             name: '@electron-forge/publisher-github',

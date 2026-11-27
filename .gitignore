@@ -127,5 +127,6 @@ dist
 .pnp.*
 
 # Electron Forge
+.webpack/
 src/config.json
 githubtoken.json

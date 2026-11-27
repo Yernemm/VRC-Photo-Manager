@@ -3,49 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>VRChat Photo Manager</title>
-    <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="../node_modules/@xterm/xterm/css/xterm.css" />
-    <script src="../node_modules/@xterm/xterm/lib/xterm.js"></script>
-    <script defer src="./render.js"></script>
   </head>
   <body>
-    <h1 class="centered">VRChat Photo Manager</h1>
-    <div id="updateBanner" class="update-banner" style="display:none;">
-      <span id="updateText"></span>
-      <a id="updateLink" href="#" style="display:none;">Open release page</a>
-    </div>
-    <div>
-      <button id="tabLogs" class="tab tab-selected" onclick="selectTab('tabLogs', 'terminalBlock')">Logs</button>
-      <button id="tabSettings" class="tab" onclick="selectTab('tabSettings', 'settingsBlock')">Settings</button>
-    </div>
-    <!--form with the discord webhook and photo path settings-->
-    <div id="settingsBlock" class="tab-body" style="display:none;">
-      <form class="centered">
-
-        <label class="settings-label" for="webhook">Webhook:</label>
-        <input class="settings-input" type="password" name="webhook" id="webhook" placeholder="Discord Webhook"/><br/>
-       
-        <label class="settings-label" for="photopath">Photo Path:</label>
-        <input class="settings-input" type="text" name="photopath" id="photopath" placeholder="C:\Users\Gamer\Pictures\VRChat or /home/gamer/Pictures/VRChat..."/><br/>
-        
-        <input class="button" type="button" onclick="saveButton()" value="Save Details" />
-        <input class="button" type="button" onclick="openConfig()" value="Open Config Folder" />
-        
-      </form>
-      <p>Photo metadata is read from VRCX data embedded in each image.</p>
-      <p>You may need to restart this program for changes to apply.</p>
-    </div>
-    <div class="tab-body" id="terminalBlock">
-      <div id="terminal" style="width: inherit;"></div>
-    </div>
-
-
-    <p><b>Work in progress... </b> Made by Yernemm. v<span id="appVersion"></span></p>
-
+    <div id="root"></div>
   </body>
-  <style>
-    button {
-      width: 100%;
-    }
-  </style>
 </html>

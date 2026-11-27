@@ -1,4 +1,4 @@
-const qrCodeReader = require('qrcode-reader');
+const qrCodeReader = require('qrcode-reader/dist/index.js');
         // __ Importing jimp __ \\
 const { Jimp } = require("jimp");
 const fs = require('fs')

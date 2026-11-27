@@ -1,5 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
+const { app, BrowserWindow, ipcMain, nativeImage } = require('electron');
+const icon = require('./images/icon.png');
 // Electron's built-in updater has no Linux support; the AppImage build uses
 // src/backend/linuxupdater.js instead.
 if (process.platform !== 'linux') {
@@ -22,7 +22,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 800,
-    icon: path.join(__dirname, 'images', 'icon.png'),
+    icon: nativeImage.createFromDataURL(icon),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -30,7 +30,7 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools();
