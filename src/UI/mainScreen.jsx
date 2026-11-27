@@ -18,7 +18,14 @@ function MainScreen({ setPage, uploadAll, setUploadAll, photo }) {
                 <button className="button" onClick={() => setPage('settings')}>Settings</button>
             </div>
             <div className="photo-frame">
-                {photo && <img src={photo} alt="VRChat photo" />}
+                {photo && (
+                    <img
+                        src={photo}
+                        alt="VRChat photo"
+                        onLoad={(e) => { e.currentTarget.style.visibility = 'visible'; }}
+                        onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+                    />
+                )}
             </div>
             <div className="button-row">
                 <button className="button">&lt;</button>

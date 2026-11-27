@@ -84,18 +84,15 @@ function parseVrcXmp(xmp){
 }
 
 async function onDetect(path){
-    showPhotoInWindow(path);
     log("[MAIN] Photo detected.");
-    console.log("hi");
     await delay(1000);
+    showPhotoInWindow(path);
     fs.stat(path, async (err, stats) => {
 
         if(err){
             error("M-001", "Error getting file stats.");
             return;
         }
-
-        console.log(stats);
 
         //Ignore non-pngs
         if(!path.endsWith('.png')){
@@ -104,8 +101,6 @@ async function onDetect(path){
         }
 
         let chunks = await readItxtChunks(path);
-
-        console.log(chunks);
 
         // Built-in VRChat XMP tags take precedence; only fall back to
         // Description for any of these that weren't present.
@@ -150,6 +145,11 @@ async function onDetect(path){
         if(world) lastWorld = world;
         if(worldId) lastWorldId = worldId;
 
+        if(!autoUploadEnabled()){
+            log("[MAIN] Automatic upload is off.");
+            return;
+        }
+
         duploader.uploadImage(path, lastUser, lastWorld, lastWorldId, Math.floor(stats.mtimeMs / 1000), moreInfo);
     });
 }
@@ -172,7 +172,16 @@ async function showPhotoInWindow(filePath){
     }
 }
 
+function autoUploadEnabled(){
+    // Missing setting counts as enabled
+    return !cfg || cfg.getConfig().autoUpload !== false;
+}
+
 function uploadNonVrcx(stats, path){
+    if(!autoUploadEnabled()){
+        log("[MAIN] Automatic upload is off.");
+        return;
+    }
     duploader.uploadImage(path, lastUser, lastWorld, lastWorldId, Math.floor(stats.mtimeMs / 1000));
 }
 

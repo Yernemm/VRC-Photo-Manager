@@ -21,12 +21,27 @@ function Placeholder({ label, setPage }) {
 
 function App() {
     const [page, setPage] = useState('main');
-    const [uploadAll, setUploadAll] = useState(false);
+    const [uploadAll, setUploadAll] = useState(true);
     const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
         ipcRenderer.send('ready');
     }, []);
+
+    // upload restore
+    useEffect(() => {
+        ipcRenderer.invoke('get-config').then((cfg) => {
+            if (cfg) setUploadAll(cfg.autoUpload !== false);
+        }).catch(() => {
+
+        });
+    }, []);
+
+    // upload toggle
+    function toggleAutoUpload(enabled) {
+        setUploadAll(enabled);
+        ipcRenderer.invoke('set-auto-upload', enabled).catch(() => {});
+    }
 
     // image preview
     useEffect(() => {
@@ -45,7 +60,7 @@ function App() {
                 <MainScreen
                     setPage={setPage}
                     uploadAll={uploadAll}
-                    setUploadAll={setUploadAll}
+                    setUploadAll={toggleAutoUpload}
                     photo={photo && photo.dataUrl}
                 />
             );

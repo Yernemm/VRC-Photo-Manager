@@ -82,8 +82,17 @@ ipcMain.on("open-config", (event, details) =>{
 ipcMain.handle("get-config", () => {
     return {
         webhook: config.webhook,
-        photopath: config.photopath
+        photopath: config.photopath,
+        autoUpload: config.autoUpload !== false
     };
+});
+
+
+ipcMain.handle("set-auto-upload", (event, enabled) => {
+    config.autoUpload = enabled === true;
+    main.log("[CM] Automatic upload " + (config.autoUpload ? "enabled" : "disabled") + ".");
+    saveConfig();
+    return config.autoUpload;
 });
 
 module.exports = {...this, config, writeConfig, getConfig, reloadConfig, setConfig, saveConfig, isLoaded, mergeConfig};
